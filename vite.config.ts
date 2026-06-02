@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+const repositoryName = 'prezzificatore-appartamento';
+
+export default defineConfig(({ mode }) => ({
+  base: mode === 'production' ? `/${repositoryName}/` : '/',
   plugins: [react()],
   css: {
     modules: {
@@ -12,4 +15,4 @@ export default defineConfig({
     globals: false,
     environment: 'node',
   },
-});
+}));

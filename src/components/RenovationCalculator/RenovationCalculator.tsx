@@ -1,15 +1,24 @@
-import { useMemo, useState, type ChangeEvent, type FocusEvent } from 'react';
+import { useMemo, useState, type ChangeEvent } from 'react';
 import { calculateEstimate, calculateEstimateBreakdown } from '../../utils/calculateEstimate';
 import { formatCurrency } from '../../utils/formatCurrency';
-import { clampNonNegative, parseNonNegativeInt } from '../../utils/clampNonNegative';
+import { NumberStepperInput } from './NumberStepperInput';
 import type { RenovationCalculatorState, RenovationSystems } from './types';
 import styles from './RenovationCalculator.module.scss';
+
+type NumberField =
+  | 'surface'
+  | 'bathrooms'
+  | 'falseCeiling'
+  | 'airConditioners'
+  | 'doorFrames'
+  | 'waterproofingArea';
 
 const INITIAL_STATE: RenovationCalculatorState = {
   surface: 60,
   bathrooms: 2,
   falseCeiling: 60,
   airConditioners: 4,
+  doorFrames: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
@@ -34,19 +43,9 @@ export function RenovationCalculator() {
   const total = useMemo(() => calculateEstimate(state), [state]);
   const breakdown = useMemo(() => calculateEstimateBreakdown(state), [state]);
 
-  const handleNumberChange =
-    (
-      field:
-        | 'surface'
-        | 'bathrooms'
-        | 'falseCeiling'
-        | 'airConditioners'
-        | 'waterproofingArea',
-    ) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const value = parseNonNegativeInt(event.target.value);
-      setState((prev) => ({ ...prev, [field]: value }));
-    };
+  const handleNumberFieldChange = (field: NumberField) => (value: number) => {
+    setState((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSystemChange =
     (key: keyof RenovationSystems) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,20 +60,6 @@ export function RenovationCalculator() {
     const enabled = event.target.checked;
     setState((prev) => ({ ...prev, waterproofingEnabled: enabled }));
   };
-
-  const handleBlur =
-    (
-      field:
-        | 'surface'
-        | 'bathrooms'
-        | 'falseCeiling'
-        | 'airConditioners'
-        | 'waterproofingArea',
-    ) =>
-    (event: FocusEvent<HTMLInputElement>) => {
-      const value = clampNonNegative(parseInt(event.target.value, 10) || 0);
-      setState((prev) => ({ ...prev, [field]: value }));
-    };
 
   return (
     <article className={styles.calculator} aria-labelledby="calculator-title">
@@ -94,79 +79,84 @@ export function RenovationCalculator() {
           </h2>
 
           <div className={styles.fieldGrid}>
-            <label className={styles.field}>
-              <span className={styles.label}>Superficie abitabile</span>
-              <div className={styles.inputWrap}>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  step={1}
-                  className={styles.input}
-                  value={state.surface}
-                  onChange={handleNumberChange('surface')}
-                  onBlur={handleBlur('surface')}
-                  aria-describedby="surface-hint"
-                />
-                <span className={styles.suffix} aria-hidden="true">
-                  m²
-                </span>
-              </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="surface">
+                Superficie abitabile
+              </label>
+              <NumberStepperInput
+                id="surface"
+                value={state.surface}
+                onChange={handleNumberFieldChange('surface')}
+                suffix="m²"
+                ariaDescribedBy="surface-hint"
+                decrementLabel="Diminuisci superficie"
+                incrementLabel="Aumenta superficie"
+              />
               <span id="surface-hint" className={styles.hint}>
                 Metri quadrati totali
               </span>
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span className={styles.label}>Bagni da ristrutturare</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                step={1}
-                className={styles.input}
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="bathrooms">
+                Bagni da ristrutturare
+              </label>
+              <NumberStepperInput
+                id="bathrooms"
                 value={state.bathrooms}
-                onChange={handleNumberChange('bathrooms')}
-                onBlur={handleBlur('bathrooms')}
+                onChange={handleNumberFieldChange('bathrooms')}
+                decrementLabel="Diminuisci bagni"
+                incrementLabel="Aumenta bagni"
               />
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span className={styles.label}>Controsoffitto</span>
-              <div className={styles.inputWrap}>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  step={1}
-                  className={styles.input}
-                  value={state.falseCeiling}
-                  onChange={handleNumberChange('falseCeiling')}
-                  onBlur={handleBlur('falseCeiling')}
-                  aria-describedby="ceiling-hint"
-                />
-                <span className={styles.suffix} aria-hidden="true">
-                  m²
-                </span>
-              </div>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="falseCeiling">
+                Controsoffitto
+              </label>
+              <NumberStepperInput
+                id="falseCeiling"
+                value={state.falseCeiling}
+                onChange={handleNumberFieldChange('falseCeiling')}
+                suffix="m²"
+                ariaDescribedBy="ceiling-hint"
+                decrementLabel="Diminuisci superficie controsoffitto"
+                incrementLabel="Aumenta superficie controsoffitto"
+              />
               <span id="ceiling-hint" className={styles.hint}>
                 Superficie controsoffitto
               </span>
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span className={styles.label}>Condizionatori</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                step={1}
-                className={styles.input}
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="airConditioners">
+                Condizionatori
+              </label>
+              <NumberStepperInput
+                id="airConditioners"
                 value={state.airConditioners}
-                onChange={handleNumberChange('airConditioners')}
-                onBlur={handleBlur('airConditioners')}
+                onChange={handleNumberFieldChange('airConditioners')}
+                decrementLabel="Diminuisci condizionatori"
+                incrementLabel="Aumenta condizionatori"
               />
-            </label>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="doorFrames">
+                Porte telai a scomparsa
+              </label>
+              <NumberStepperInput
+                id="doorFrames"
+                value={state.doorFrames}
+                onChange={handleNumberFieldChange('doorFrames')}
+                ariaDescribedBy="door-frames-hint"
+                decrementLabel="Diminuisci porte telai a scomparsa"
+                incrementLabel="Aumenta porte telai a scomparsa"
+              />
+              <span id="door-frames-hint" className={styles.hint}>
+                Montaggio, 500 €/cad.
+              </span>
+            </div>
           </div>
         </section>
 
@@ -205,28 +195,23 @@ export function RenovationCalculator() {
               </label>
 
               {state.waterproofingEnabled && (
-                <label className={styles.systemField}>
-                  <span className={styles.label}>Superficie da impermeabilizzare</span>
-                  <div className={styles.inputWrap}>
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      min={0}
-                      step={1}
-                      className={styles.input}
-                      value={state.waterproofingArea}
-                      onChange={handleNumberChange('waterproofingArea')}
-                      onBlur={handleBlur('waterproofingArea')}
-                      aria-describedby="waterproofing-hint"
-                    />
-                    <span className={styles.suffix} aria-hidden="true">
-                      m²
-                    </span>
-                  </div>
+                <div className={styles.systemField}>
+                  <label className={styles.label} htmlFor="waterproofingArea">
+                    Superficie da impermeabilizzare
+                  </label>
+                  <NumberStepperInput
+                    id="waterproofingArea"
+                    value={state.waterproofingArea}
+                    onChange={handleNumberFieldChange('waterproofingArea')}
+                    suffix="m²"
+                    ariaDescribedBy="waterproofing-hint"
+                    decrementLabel="Diminuisci superficie impermeabilizzazione"
+                    incrementLabel="Aumenta superficie impermeabilizzazione"
+                  />
                   <span id="waterproofing-hint" className={styles.hint}>
                     50 €/m²
                   </span>
-                </label>
+                </div>
               )}
             </div>
           </fieldset>

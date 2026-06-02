@@ -1,15 +1,16 @@
 import type { EstimateBreakdownItem, RenovationInputs } from '../components/RenovationCalculator/types';
 
 export const PRICES = {
-  sqm: 180,
-  bathroom: 5000,
+  sqm: 130,
+  bathroom: 4000,
   falseCeiling: 35,
-  airConditioner: 550,
+  airConditioner: 400,
+  doorFrame: 500,
   waterproofing: 50,
-  electrical: 1800,
-  plumbing: 900,
-  heating: 800,
-  gas: 420,
+  electrical: 2000,
+  plumbing: 1800,
+  heating: 1800,
+  gas: 400,
 } as const;
 
 export type PriceKey = keyof typeof PRICES;
@@ -27,6 +28,7 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     bathrooms,
     falseCeiling,
     airConditioners,
+    doorFrames,
     waterproofingEnabled,
     waterproofingArea,
     systems,
@@ -67,6 +69,15 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
       label: 'Condizionatori',
       detail: `${airConditioners} × ${PRICES.airConditioner} €`,
       amount: airConditioners * PRICES.airConditioner,
+    });
+  }
+
+  if (doorFrames > 0) {
+    items.push({
+      id: 'doorFrames',
+      label: 'Porte telai a scomparsa',
+      detail: `${doorFrames} × ${PRICES.doorFrame} €`,
+      amount: doorFrames * PRICES.doorFrame,
     });
   }
 

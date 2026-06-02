@@ -1,15 +1,30 @@
 import { describe, expect, it } from 'vitest';
 import { calculateEstimate, calculateEstimateBreakdown, PRICES } from './calculateEstimate';
 
+const baseInputs = {
+  surface: 0,
+  bathrooms: 0,
+  falseCeiling: 0,
+  airConditioners: 0,
+  doorFrames: 0,
+  waterproofingEnabled: false,
+  waterproofingArea: 0,
+  systems: {
+    electrical: false,
+    plumbing: false,
+    heating: false,
+    gas: false,
+  },
+};
+
 describe('calculateEstimate', () => {
-  it('calculates the example total of €25,420', () => {
+  it('calculates total with default example values', () => {
     const total = calculateEstimate({
+      ...baseInputs,
       surface: 60,
       bathrooms: 2,
       falseCeiling: 60,
       airConditioners: 4,
-      waterproofingEnabled: false,
-      waterproofingArea: 0,
       systems: {
         electrical: true,
         plumbing: true,
@@ -18,17 +33,12 @@ describe('calculateEstimate', () => {
       },
     });
 
-    expect(total).toBe(25420);
+    expect(total).toBe(27620);
   });
 
   it('excludes unselected systems', () => {
     const total = calculateEstimate({
-      surface: 0,
-      bathrooms: 0,
-      falseCeiling: 0,
-      airConditioners: 0,
-      waterproofingEnabled: false,
-      waterproofingArea: 0,
+      ...baseInputs,
       systems: {
         electrical: true,
         plumbing: false,
@@ -42,29 +52,31 @@ describe('calculateEstimate', () => {
 
   it('adds waterproofing cost when enabled', () => {
     const total = calculateEstimate({
-      surface: 0,
-      bathrooms: 0,
-      falseCeiling: 0,
-      airConditioners: 0,
+      ...baseInputs,
       waterproofingEnabled: true,
       waterproofingArea: 20,
-      systems: {
-        electrical: false,
-        plumbing: false,
-        heating: false,
-        gas: false,
-      },
     });
 
     expect(total).toBe(20 * PRICES.waterproofing);
   });
 
+  it('adds door frame cost per piece', () => {
+    const total = calculateEstimate({
+      ...baseInputs,
+      doorFrames: 3,
+    });
+
+    expect(total).toBe(3 * PRICES.doorFrame);
+  });
+
   it('builds a breakdown that sums to the total', () => {
     const inputs = {
+      ...baseInputs,
       surface: 60,
       bathrooms: 2,
       falseCeiling: 60,
       airConditioners: 4,
+      doorFrames: 2,
       waterproofingEnabled: true,
       waterproofingArea: 10,
       systems: {
@@ -79,7 +91,10 @@ describe('calculateEstimate', () => {
     const sum = breakdown.reduce((acc, item) => acc + item.amount, 0);
 
     expect(sum).toBe(calculateEstimate(inputs));
-    expect(breakdown).toHaveLength(7);
+    expect(breakdown).toHaveLength(8);
+    expect(breakdown.find((item) => item.id === 'doorFrames')?.amount).toBe(
+      2 * PRICES.doorFrame,
+    );
     expect(breakdown.find((item) => item.id === 'waterproofing')?.amount).toBe(
       10 * PRICES.waterproofing,
     );
