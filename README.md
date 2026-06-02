@@ -15,31 +15,39 @@ npm start
 
 Apri http://localhost:5173/
 
-## Build
+## Deploy su GitHub Pages
+
+### Configurazione (una tantum)
+
+In [Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages):
+
+- **Source:** Deploy from a branch
+- **Branch:** `gh-pages`
+- **Folder:** `/ (root)`
+
+### Pubblicare
+
+```bash
+npm install
+npm run deploy
+```
+
+`npm run deploy` esegue la build di produzione e carica la cartella `dist` sul branch `gh-pages`.
+
+### Anteprima build locale (path come su Pages)
 
 ```bash
 npm run build
 npm run preview
 ```
 
-In produzione l'app è servita sotto `/prezzificatore-appartamento/`.
-
-## GitHub Pages
-
-Il deploy avviene automaticamente via GitHub Actions: build → push della cartella `dist` sul branch `gh-pages`.
-
-**Configurazione obbligatoria** ([Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages)):
-
-1. **Build and deployment → Source:** **Deploy from a branch**
-2. **Branch:** `gh-pages` — cartella **`/ (root)`**
-3. Salva, attendi 1–2 minuti dopo un workflow verde in **Actions**
-4. Apri: **https://mikixit.github.io/prezzificatore-appartamento/**
+Apri l’URL indicato nel terminale.
 
 ### Errore `GET .../src/main.tsx 404`
 
-Significa che Pages sta ancora servendo i file sorgente da `main`, non la build. Imposta il branch **`gh-pages`** come sopra, poi **Actions → Deploy to GitHub Pages → Run workflow**.
+Pages sta servendo i file da `main` invece della build. Verifica che il branch sia **`gh-pages`**, poi esegui di nuovo `npm run deploy` e attendi 1–2 minuti.
 
-Nel sorgente pagina devi vedere `/prezzificatore-appartamento/assets/...`, mai `/src/main.tsx`.
+Nel sorgente della pagina devono comparire path tipo `/prezzificatore-appartamento/assets/...`, mai `/src/main.tsx`.
 
 ## Test
 
