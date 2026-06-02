@@ -28,12 +28,17 @@ In produzione l'app è servita sotto `/prezzificatore-appartamento/`.
 
 Il deploy avviene automaticamente via GitHub Actions ad ogni push su `main`.
 
-**Configurazione una tantum nel repository:**
+**Configurazione obbligatoria nel repository** ([Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages)):
 
-1. Vai su **Settings → Pages**
-2. In **Build and deployment → Source** seleziona **GitHub Actions**
+1. **Build and deployment → Source:** seleziona **GitHub Actions** (non "Deploy from a branch")
+2. Dopo un push su `main`, attendi che il workflow **Deploy to GitHub Pages** sia verde in **Actions**
+3. Apri l'URL con il path del repo: `https://mikixit.github.io/prezzificatore-appartamento/`
 
-Dopo il primo deploy completato, l'app sarà disponibile all'URL della demo.
+### Errore 404 su JS/CSS
+
+Se la pagina è bianca o in console vedi 404 su `/src/main.tsx`, GitHub sta servendo i file sorgente invece della build. Imposta **Source → GitHub Actions** e rilancia il workflow da **Actions → Run workflow**.
+
+Dopo il deploy corretto, `index.html` deve puntare a `/prezzificatore-appartamento/assets/...` e non a `/src/main.tsx`.
 
 ## Test
 
