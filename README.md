@@ -26,19 +26,20 @@ In produzione l'app è servita sotto `/prezzificatore-appartamento/`.
 
 ## GitHub Pages
 
-Il deploy avviene automaticamente via GitHub Actions ad ogni push su `main`.
+Il deploy avviene automaticamente via GitHub Actions: build → push della cartella `dist` sul branch `gh-pages`.
 
-**Configurazione obbligatoria nel repository** ([Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages)):
+**Configurazione obbligatoria** ([Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages)):
 
-1. **Build and deployment → Source:** seleziona **GitHub Actions** (non "Deploy from a branch")
-2. Dopo un push su `main`, attendi che il workflow **Deploy to GitHub Pages** sia verde in **Actions**
-3. Apri l'URL con il path del repo: `https://mikixit.github.io/prezzificatore-appartamento/`
+1. **Build and deployment → Source:** **Deploy from a branch**
+2. **Branch:** `gh-pages` — cartella **`/ (root)`**
+3. Salva, attendi 1–2 minuti dopo un workflow verde in **Actions**
+4. Apri: **https://mikixit.github.io/prezzificatore-appartamento/**
 
-### Errore 404 su JS/CSS
+### Errore `GET .../src/main.tsx 404`
 
-Se la pagina è bianca o in console vedi 404 su `/src/main.tsx`, GitHub sta servendo i file sorgente invece della build. Imposta **Source → GitHub Actions** e rilancia il workflow da **Actions → Run workflow**.
+Significa che Pages sta ancora servendo i file sorgente da `main`, non la build. Imposta il branch **`gh-pages`** come sopra, poi **Actions → Deploy to GitHub Pages → Run workflow**.
 
-Dopo il deploy corretto, `index.html` deve puntare a `/prezzificatore-appartamento/assets/...` e non a `/src/main.tsx`.
+Nel sorgente pagina devi vedere `/prezzificatore-appartamento/assets/...`, mai `/src/main.tsx`.
 
 ## Test
 
