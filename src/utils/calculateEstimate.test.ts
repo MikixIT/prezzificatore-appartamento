@@ -19,7 +19,7 @@ const baseInputs = {
 
 describe('calculateEstimate', () => {
   it('calculates total with default example values', () => {
-    const total = calculateEstimate({
+    const inputs = {
       ...baseInputs,
       surface: 60,
       bathrooms: 2,
@@ -31,9 +31,19 @@ describe('calculateEstimate', () => {
         heating: true,
         gas: true,
       },
-    });
+    };
 
-    expect(total).toBe(27620);
+    const expected =
+      60 * PRICES.sqm +
+      2 * PRICES.bathroom +
+      60 * PRICES.falseCeiling +
+      4 * PRICES.airConditioner +
+      PRICES.electrical +
+      PRICES.plumbing +
+      PRICES.heating +
+      PRICES.gas;
+
+    expect(calculateEstimate(inputs)).toBe(expected);
   });
 
   it('excludes unselected systems', () => {
