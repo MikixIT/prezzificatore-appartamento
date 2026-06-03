@@ -16,6 +16,18 @@ export const PRICES = {
   gas: 400,
 } as const;
 
+function getEffectivePrices() {
+  try {
+    if (typeof localStorage === 'undefined') return PRICES;
+    const raw = localStorage.getItem('prezzificatore-prices');
+    if (!raw) return PRICES;
+    const overrides = JSON.parse(raw);
+    return { ...PRICES, ...overrides };
+  } catch (e) {
+    return PRICES;
+  }
+}
+
 const FLOOR_SURCHARGE: Record<RenovationInputs['floorLevel'], number> = {
   0: 0,
   1: 0.05,
@@ -53,12 +65,15 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
 
   const items: EstimateBreakdownItem[] = [];
 
+  const prices = getEffectivePrices();
+  const priceMap = prices as unknown as Record<string, number>;
+
   if (surface > 0) {
     items.push({
       id: 'surface',
       label: 'Superficie abitabile',
-      detail: `${surface} m² × ${PRICES.sqm} €`,
-      amount: surface * PRICES.sqm,
+      detail: `${surface} m² × ${prices.sqm} €`,
+      amount: surface * prices.sqm,
     });
   }
 
@@ -66,8 +81,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'bathrooms',
       label: 'Bagni',
-      detail: `${bathrooms} × ${PRICES.bathroom} €`,
-      amount: bathrooms * PRICES.bathroom,
+      detail: `${bathrooms} × ${prices.bathroom} €`,
+      amount: bathrooms * prices.bathroom,
     });
   }
 
@@ -75,8 +90,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'falseCeiling',
       label: 'Controsoffitto',
-      detail: `${falseCeiling} m² × ${PRICES.falseCeiling} €`,
-      amount: falseCeiling * PRICES.falseCeiling,
+      detail: `${falseCeiling} m² × ${prices.falseCeiling} €`,
+      amount: falseCeiling * prices.falseCeiling,
     });
   }
 
@@ -84,8 +99,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'airConditioners',
       label: 'Condizionatori',
-      detail: `${airConditioners} × ${PRICES.airConditioner} €`,
-      amount: airConditioners * PRICES.airConditioner,
+      detail: `${airConditioners} × ${prices.airConditioner} €`,
+      amount: airConditioners * prices.airConditioner,
     });
   }
 
@@ -93,8 +108,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'doorFrames',
       label: 'Porte telai a scomparsa',
-      detail: `${doorFrames} × ${PRICES.doorFrame} €`,
-      amount: doorFrames * PRICES.doorFrame,
+      detail: `${doorFrames} × ${prices.doorFrame} €`,
+      amount: doorFrames * prices.doorFrame,
     });
   }
 
@@ -102,8 +117,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'wallsDemolition',
       label: 'Abbattimento muro',
-      detail: `${wallsDemolition} × ${PRICES.wallsDemolition} €`,
-      amount: wallsDemolition * PRICES.wallsDemolition,
+      detail: `${wallsDemolition} × ${prices.wallsDemolition} €`,
+      amount: wallsDemolition * prices.wallsDemolition,
     });
   }
 
@@ -111,8 +126,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'wallConstruction',
       label: 'Costruzione muro',
-      detail: `${wallConstruction} × ${PRICES.wallConstruction} €`,
-      amount: wallConstruction * PRICES.wallConstruction,
+      detail: `${wallConstruction} × ${prices.wallConstruction} €`,
+      amount: wallConstruction * prices.wallConstruction,
     });
   }
 
@@ -120,8 +135,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'paintingRooms',
       label: 'Tinteggiatura camera',
-      detail: `${paintingRooms} × ${PRICES.paintingRooms} €`,
-      amount: paintingRooms * PRICES.paintingRooms,
+      detail: `${paintingRooms} × ${prices.paintingRooms} €`,
+      amount: paintingRooms * prices.paintingRooms,
     });
   }
 
@@ -129,8 +144,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     items.push({
       id: 'waterproofing',
       label: 'Impermeabilizzazione guaina',
-      detail: `${waterproofingArea} m² × ${PRICES.waterproofing} €`,
-      amount: waterproofingArea * PRICES.waterproofing,
+      detail: `${waterproofingArea} m² × ${prices.waterproofing} €`,
+      amount: waterproofingArea * prices.waterproofing,
     });
   }
 
@@ -139,8 +154,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
       items.push({
         id: key,
         label: SYSTEM_LABELS[key],
-        detail: `1 × ${PRICES[key]} €`,
-        amount: PRICES[key],
+        detail: `1 × ${priceMap[key]} €`,
+        amount: priceMap[key],
       });
     }
   });

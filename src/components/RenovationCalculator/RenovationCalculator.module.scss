@@ -94,6 +94,20 @@ $radius: 12px;
   }
 }
 
+.settingsButton {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--toggle-border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
 .title {
   margin: 0;
   font-size: 1.375rem;

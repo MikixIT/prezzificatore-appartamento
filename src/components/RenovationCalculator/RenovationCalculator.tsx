@@ -1,8 +1,9 @@
-import { useMemo, useState, type ChangeEvent } from 'react';
+import { useMemo, useState, useEffect, type ChangeEvent } from 'react';
 import { calculateEstimate, calculateEstimateBreakdown } from '../../utils/calculateEstimate';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { useTheme } from '../../hooks/useTheme';
 import { NumberStepperInput } from './NumberStepperInput';
+import { SettingsModal } from '../SettingsModal/SettingsModal';
 import type { RenovationCalculatorState, RenovationSystems } from './types';
 import styles from './RenovationCalculator.module.scss';
 
@@ -48,11 +49,13 @@ const SYSTEM_OPTIONS: { key: keyof RenovationSystems; label: string }[] = [
 
 export function RenovationCalculator() {
   const [state, setState] = useState<RenovationCalculatorState>(INITIAL_STATE);
+  const [showSettings, setShowSettings] = useState(false);
+  const [pricesVersion, setPricesVersion] = useState(0);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
-  const total = useMemo(() => calculateEstimate(state), [state]);
-  const breakdown = useMemo(() => calculateEstimateBreakdown(state), [state]);
+  const total = useMemo(() => calculateEstimate(state), [state, pricesVersion]);
+  const breakdown = useMemo(() => calculateEstimateBreakdown(state), [state, pricesVersion]);
 
   const resetValues = () => setState(INITIAL_STATE);
 
@@ -73,6 +76,12 @@ export function RenovationCalculator() {
     const enabled = event.target.checked;
     setState((prev) => ({ ...prev, waterproofingEnabled: enabled }));
   };
+
+  useEffect(() => {
+    const handler = () => setPricesVersion((v) => v + 1);
+    window.addEventListener('pricesChanged', handler);
+    return () => window.removeEventListener('pricesChanged', handler);
+  }, []);
 
   const handleFloorLevelChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const level = Number(event.target.value) as RenovationCalculatorState['floorLevel'];
@@ -102,6 +111,14 @@ export function RenovationCalculator() {
             </button>
             <button
               type="button"
+              className={styles.settingsButton}
+              onClick={() => setShowSettings(true)}
+              aria-label="Apri impostazioni prezzi"
+            >
+              ⚙
+            </button>
+            <button
+              type="button"
               className={styles.themeToggle}
               onClick={toggleTheme}
               aria-label={isDark ? 'Attiva modalità chiara' : 'Attiva modalità scura'}
@@ -111,6 +128,8 @@ export function RenovationCalculator() {
           </div>
         </div>
       </header>
+
+      <SettingsModal open={showSettings} onClose={() => setShowSettings(false)} />
 
       <form className={styles.form} onSubmit={(e) => e.preventDefault()} noValidate>
         <section className={styles.section} aria-labelledby="dimensions-heading">
