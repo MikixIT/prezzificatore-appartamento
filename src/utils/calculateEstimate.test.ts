@@ -7,6 +7,8 @@ const baseInputs = {
   falseCeiling: 0,
   airConditioners: 0,
   doorFrames: 0,
+  wallsDemolition: 0,
+  paintingRooms: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
@@ -87,6 +89,8 @@ describe('calculateEstimate', () => {
       falseCeiling: 60,
       airConditioners: 4,
       doorFrames: 2,
+      wallsDemolition: 1,
+      paintingRooms: 3,
       waterproofingEnabled: true,
       waterproofingArea: 10,
       systems: {
@@ -101,7 +105,7 @@ describe('calculateEstimate', () => {
     const sum = breakdown.reduce((acc, item) => acc + item.amount, 0);
 
     expect(sum).toBe(calculateEstimate(inputs));
-    expect(breakdown).toHaveLength(8);
+    expect(breakdown).toHaveLength(10);
     expect(breakdown.find((item) => item.id === 'doorFrames')?.amount).toBe(
       2 * PRICES.doorFrame,
     );
