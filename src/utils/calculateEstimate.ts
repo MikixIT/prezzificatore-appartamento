@@ -7,6 +7,7 @@ export const PRICES = {
   airConditioner: 400,
   doorFrame: 500,
   wallsDemolition: 650,
+  wallConstruction: 1250,
   paintingRooms: 400,
   waterproofing: 50,
   electrical: 2000,
@@ -32,6 +33,7 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     airConditioners,
     doorFrames,
     wallsDemolition,
+    wallConstruction,
     paintingRooms,
     waterproofingEnabled,
     waterproofingArea,
@@ -91,6 +93,15 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
       label: 'Abbattimento muro',
       detail: `${wallsDemolition} × ${PRICES.wallsDemolition} €`,
       amount: wallsDemolition * PRICES.wallsDemolition,
+    });
+  }
+
+  if (wallConstruction > 0) {
+    items.push({
+      id: 'wallConstruction',
+      label: 'Costruzione muro',
+      detail: `${wallConstruction} × ${PRICES.wallConstruction} €`,
+      amount: wallConstruction * PRICES.wallConstruction,
     });
   }
 

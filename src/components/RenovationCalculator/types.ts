@@ -12,6 +12,7 @@ export interface RenovationInputs {
   airConditioners: number;
   doorFrames: number;
   wallsDemolition: number;
+  wallConstruction: number;
   paintingRooms: number;
   waterproofingEnabled: boolean;
   waterproofingArea: number;

@@ -13,6 +13,7 @@ type NumberField =
   | 'airConditioners'
   | 'doorFrames'
   | 'wallsDemolition'
+  | 'wallConstruction'
   | 'paintingRooms'
   | 'waterproofingArea';
 
@@ -23,6 +24,7 @@ const INITIAL_STATE: RenovationCalculatorState = {
   airConditioners: 0,
   doorFrames: 0,
   wallsDemolition: 0,
+  wallConstruction: 0,
   paintingRooms: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
@@ -202,6 +204,23 @@ export function RenovationCalculator() {
               />
               <span id="walls-hint" className={styles.hint}>
                 650 €/cad.
+              </span>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="wallConstruction">
+                Costruzione muro
+              </label>
+              <NumberStepperInput
+                id="wallConstruction"
+                value={state.wallConstruction}
+                onChange={handleNumberFieldChange('wallConstruction')}
+                ariaDescribedBy="construction-hint"
+                decrementLabel="Diminuisci muri da costruire"
+                incrementLabel="Aumenta muri da costruire"
+              />
+              <span id="construction-hint" className={styles.hint}>
+                1.250 €/cad.
               </span>
             </div>
 
