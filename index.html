@@ -4,8 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prezzificatore ristrutturazione</title>
-    <script type="module" crossorigin src="/prezzificatore-appartamento/assets/index-CUrz0YDS.js"></script>
-    <link rel="stylesheet" crossorigin href="/prezzificatore-appartamento/assets/index-Cdx1uljK.css">
+    <script>
+      (function () {
+        var stored = localStorage.getItem('prezzificatore-theme');
+        var dark =
+          stored === 'dark' ||
+          (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.dataset.theme = 'dark';
+      })();
+    </script>
+    <script type="module" crossorigin src="/prezzificatore-appartamento/assets/index-Biqm-bTm.js"></script>
+    <link rel="stylesheet" crossorigin href="/prezzificatore-appartamento/assets/index-4Mlh6sua.css">
   </head>
   <body>
     <div id="root"></div>
