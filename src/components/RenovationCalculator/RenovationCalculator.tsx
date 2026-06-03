@@ -14,18 +14,18 @@ type NumberField =
   | 'waterproofingArea';
 
 const INITIAL_STATE: RenovationCalculatorState = {
-  surface: 60,
-  bathrooms: 2,
-  falseCeiling: 60,
-  airConditioners: 4,
+  surface: 0,
+  bathrooms: 0,
+  falseCeiling: 0,
+  airConditioners: 0,
   doorFrames: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
-    electrical: true,
-    plumbing: true,
-    heating: true,
-    gas: true,
+    electrical: false,
+    plumbing: false,
+    heating: false,
+    gas: false,
   },
 };
 

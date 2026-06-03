@@ -1,5 +1,9 @@
-import { type ChangeEvent, type FocusEvent } from 'react';
-import { clampNonNegative, parseNonNegativeInt } from '../../utils/clampNonNegative';
+import { useEffect, useState, type ChangeEvent, type FocusEvent } from 'react';
+import {
+  clampNonNegative,
+  formatNumberInputValue,
+  parseNonNegativeInt,
+} from '../../utils/clampNonNegative';
 import styles from './NumberStepperInput.module.scss';
 
 interface NumberStepperInputProps {
@@ -25,16 +29,39 @@ export function NumberStepperInput({
   decrementLabel = 'Diminuisci',
   incrementLabel = 'Aumenta',
 }: NumberStepperInputProps) {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(parseNonNegativeInt(event.target.value));
+  const [isFocused, setIsFocused] = useState(false);
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    if (!isFocused) {
+      setText(formatNumberInputValue(value));
+    }
+  }, [value, isFocused]);
+
+  const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+    const next = formatNumberInputValue(value);
+    setText(next);
+    requestAnimationFrame(() => event.target.select());
   };
 
-  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
-    onChange(clampNonNegative(parseInt(event.target.value, 10) || min));
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const digits = event.target.value.replace(/\D/g, '');
+    setText(digits);
+    onChange(parseNonNegativeInt(digits));
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    const parsed = parseNonNegativeInt(text);
+    onChange(clampNonNegative(parsed < min ? min : parsed));
+    setText(formatNumberInputValue(parsed));
   };
 
   const handleStep = (delta: number) => {
-    onChange(clampNonNegative(value + delta));
+    const next = clampNonNegative(value + delta);
+    onChange(next < min ? min : next);
+    setText(formatNumberInputValue(next));
   };
 
   const stepper = (
@@ -51,15 +78,16 @@ export function NumberStepperInput({
 
       <input
         id={id}
-        type="number"
+        type="text"
         inputMode="numeric"
-        min={min}
-        step={step}
+        pattern="[0-9]*"
         className={styles.input}
-        value={value}
+        value={text}
         onChange={handleChange}
+        onFocus={handleFocus}
         onBlur={handleBlur}
         aria-describedby={ariaDescribedBy}
+        placeholder="0"
       />
 
       <button
