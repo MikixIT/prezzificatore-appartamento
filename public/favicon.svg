@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Prezzificatore icon">
+  <defs>
+    <linearGradient id="paint" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#b91c1c" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <linearGradient id="shine" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="32" fill="url(#paint)" />
+  <path d="M44 28v72h18V68h20c13.255 0 24-10.745 24-24S95.255 20 82 20H44Z" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M62 38h10c7.18 0 13 5.82 13 13s-5.82 13-13 13H62V38Z" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M33 22c4.5 0 8.75 1.75 12 4.75L37 38c-3-1.75-5.5-4.75-5.5-8.5 0-1.5.4-2.9 1.1-4.15A16.4 16.4 0 0 1 33 22Z" fill="rgba(255,255,255,0.18)" />
+  <rect x="30" y="28" width="70" height="15" rx="7.5" fill="url(#shine)" />
+</svg>

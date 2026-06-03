@@ -45,6 +45,8 @@ export function RenovationCalculator() {
   const total = useMemo(() => calculateEstimate(state), [state]);
   const breakdown = useMemo(() => calculateEstimateBreakdown(state), [state]);
 
+  const resetValues = () => setState(INITIAL_STATE);
+
   const handleNumberFieldChange = (field: NumberField) => (value: number) => {
     setState((prev) => ({ ...prev, [field]: value }));
   };
@@ -75,14 +77,24 @@ export function RenovationCalculator() {
               Inserisci i dati dell&apos;appartamento per ottenere una stima indicativa.
             </p>
           </div>
-          <button
-            type="button"
-            className={styles.themeToggle}
-            onClick={toggleTheme}
-            aria-label={isDark ? 'Attiva modalità chiara' : 'Attiva modalità scura'}
-          >
-            {isDark ? '☀' : '☾'}
-          </button>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.resetButton}
+              onClick={resetValues}
+              aria-label="Azzera tutti i valori"
+            >
+              Azzerra
+            </button>
+            <button
+              type="button"
+              className={styles.themeToggle}
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Attiva modalità chiara' : 'Attiva modalità scura'}
+            >
+              {isDark ? '☀' : '☾'}
+            </button>
+          </div>
         </div>
       </header>
 

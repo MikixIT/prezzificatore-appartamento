@@ -5,7 +5,8 @@ export type Theme = 'light' | 'dark';
 const STORAGE_KEY = 'prezzificatore-theme';
 
 function readTheme(): Theme {
-  return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return stored === 'dark' ? 'dark' : 'light';
 }
 
 export function useTheme() {
