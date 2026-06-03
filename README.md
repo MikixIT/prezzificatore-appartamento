@@ -1,56 +1,61 @@
 # prezzificatore-appartamento
 
-Calcolatore preventivo per ristrutturazioni appartamento, realizzato con React, TypeScript e Vite.
+**Instant renovation estimates for apartments.**
 
-## Demo
+A minimal quote calculator: enter surfaces, rooms, and systems — get a live total with an expandable cost breakdown. Built with React, TypeScript, and Vite.
 
-https://mikixit.github.io/prezzificatore-appartamento/
+[**Live demo →**](https://mikixit.github.io/prezzificatore-appartamento/)
 
-## Sviluppo locale
+---
+
+## Features
+
+- Real-time estimate as you type
+- Stepper inputs and optional systems (electrical, plumbing, heating, gas)
+- Waterproofing, door frames, A/C, false ceiling
+- Itemized breakdown (IVA excluded)
+- Mobile-first UI
+
+## Local development
 
 ```bash
 npm install
 npm start
 ```
 
-Apri http://localhost:5173/
+Open http://localhost:5173/
 
-## Deploy su GitHub Pages
+## Deploy (GitHub Pages)
 
-### Configurazione (una tantum)
+**One-time setup** — [Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages):
 
-In [Settings → Pages](https://github.com/MikixIT/prezzificatore-appartamento/settings/pages):
+| Setting | Value |
+|--------|--------|
+| Source | Deploy from a branch |
+| Branch | `gh-pages` |
+| Folder | `/ (root)` |
 
-- **Source:** Deploy from a branch
-- **Branch:** `gh-pages`
-- **Folder:** `/ (root)`
-
-### Pubblicare
+**Publish:**
 
 ```bash
-npm install
 npm run deploy
 ```
 
-`npm run deploy` esegue la build di produzione e carica la cartella `dist` sul branch `gh-pages`.
+Builds `dist` and pushes it to the `gh-pages` branch.
 
-### Anteprima build locale (path come su Pages)
+**Preview production build locally:**
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Apri l’URL indicato nel terminale.
-
-### Errore `GET .../src/main.tsx 404`
-
-Pages sta servendo i file da `main` invece della build. Verifica che il branch sia **`gh-pages`**, poi esegui di nuovo `npm run deploy` e attendi 1–2 minuti.
-
-Nel sorgente della pagina devono comparire path tipo `/prezzificatore-appartamento/assets/...`, mai `/src/main.tsx`.
-
-## Test
+## Tests
 
 ```bash
 npm test
 ```
+
+## Stack
+
+React · TypeScript · Vite · SCSS modules · Vitest
