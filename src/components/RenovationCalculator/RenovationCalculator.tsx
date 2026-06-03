@@ -1,6 +1,7 @@
 import { useMemo, useState, type ChangeEvent } from 'react';
 import { calculateEstimate, calculateEstimateBreakdown } from '../../utils/calculateEstimate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { useTheme } from '../../hooks/useTheme';
 import { NumberStepperInput } from './NumberStepperInput';
 import type { RenovationCalculatorState, RenovationSystems } from './types';
 import styles from './RenovationCalculator.module.scss';
@@ -39,6 +40,7 @@ const SYSTEM_OPTIONS: { key: keyof RenovationSystems; label: string }[] = [
 export function RenovationCalculator() {
   const [state, setState] = useState<RenovationCalculatorState>(INITIAL_STATE);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   const total = useMemo(() => calculateEstimate(state), [state]);
   const breakdown = useMemo(() => calculateEstimateBreakdown(state), [state]);
@@ -64,12 +66,24 @@ export function RenovationCalculator() {
   return (
     <article className={styles.calculator} aria-labelledby="calculator-title">
       <header className={styles.header}>
-        <h1 id="calculator-title" className={styles.title}>
-          Preventivo ristrutturazione
-        </h1>
-        <p className={styles.subtitle}>
-          Inserisci i dati dell&apos;appartamento per ottenere una stima indicativa.
-        </p>
+        <div className={styles.headerRow}>
+          <div className={styles.headerText}>
+            <h1 id="calculator-title" className={styles.title}>
+              Preventivo ristrutturazione
+            </h1>
+            <p className={styles.subtitle}>
+              Inserisci i dati dell&apos;appartamento per ottenere una stima indicativa.
+            </p>
+          </div>
+          <button
+            type="button"
+            className={styles.themeToggle}
+            onClick={toggleTheme}
+            aria-label={isDark ? 'Attiva modalità chiara' : 'Attiva modalità scura'}
+          >
+            {isDark ? '☀' : '☾'}
+          </button>
+        </div>
       </header>
 
       <form className={styles.form} onSubmit={(e) => e.preventDefault()} noValidate>
