@@ -14,6 +14,7 @@ export interface RenovationInputs {
   wallsDemolition: number;
   wallConstruction: number;
   paintingRooms: number;
+  floorLevel: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   waterproofingEnabled: boolean;
   waterproofingArea: number;
   systems: RenovationSystems;

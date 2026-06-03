@@ -17,6 +17,8 @@ type NumberField =
   | 'paintingRooms'
   | 'waterproofingArea';
 
+const FLOOR_LEVELS = [0, 1, 2, 3, 4, 5, 6] as const;
+
 const INITIAL_STATE: RenovationCalculatorState = {
   surface: 0,
   bathrooms: 0,
@@ -26,6 +28,7 @@ const INITIAL_STATE: RenovationCalculatorState = {
   wallsDemolition: 0,
   wallConstruction: 0,
   paintingRooms: 0,
+  floorLevel: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
@@ -69,6 +72,11 @@ export function RenovationCalculator() {
   const handleWaterproofingToggle = (event: ChangeEvent<HTMLInputElement>) => {
     const enabled = event.target.checked;
     setState((prev) => ({ ...prev, waterproofingEnabled: enabled }));
+  };
+
+  const handleFloorLevelChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const level = Number(event.target.value) as RenovationCalculatorState['floorLevel'];
+    setState((prev) => ({ ...prev, floorLevel: level }));
   };
 
   return (
@@ -126,6 +134,27 @@ export function RenovationCalculator() {
               />
               <span id="surface-hint" className={styles.hint}>
                 Metri quadrati totali
+              </span>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="floorLevel">
+                Piano
+              </label>
+              <select
+                id="floorLevel"
+                className={styles.select}
+                value={state.floorLevel}
+                onChange={handleFloorLevelChange}
+              >
+                {FLOOR_LEVELS.map((level) => (
+                  <option key={level} value={level}>
+                    Piano {level} — {level === 0 ? '0%' : level === 1 ? '5%' : level === 2 ? '10%' : level === 3 ? '12%' : level === 4 ? '18%' : level === 5 ? '20%' : '25%'}
+                  </option>
+                ))}
+              </select>
+              <span id="floor-hint" className={styles.hint}>
+                Percentuale sul totale in base al piano.
               </span>
             </div>
 

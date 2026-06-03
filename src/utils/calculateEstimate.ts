@@ -16,6 +16,16 @@ export const PRICES = {
   gas: 400,
 } as const;
 
+const FLOOR_SURCHARGE: Record<RenovationInputs['floorLevel'], number> = {
+  0: 0,
+  1: 0.05,
+  2: 0.1,
+  3: 0.12,
+  4: 0.18,
+  5: 0.2,
+  6: 0.25,
+};
+
 export type PriceKey = keyof typeof PRICES;
 
 const SYSTEM_LABELS = {
@@ -35,6 +45,7 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     wallsDemolition,
     wallConstruction,
     paintingRooms,
+    floorLevel,
     waterproofingEnabled,
     waterproofingArea,
     systems,
@@ -133,6 +144,18 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
       });
     }
   });
+
+  const baseAmount = items.reduce((total, item) => total + item.amount, 0);
+  const surchargeRate = FLOOR_SURCHARGE[floorLevel] ?? 0;
+
+  if (baseAmount > 0 && surchargeRate > 0) {
+    items.push({
+      id: 'floorSurcharge',
+      label: `Soprapprezzo piano ${floorLevel}`,
+      detail: `${Math.round(surchargeRate * 100)}%`,
+      amount: Math.round(baseAmount * surchargeRate),
+    });
+  }
 
   return items;
 }

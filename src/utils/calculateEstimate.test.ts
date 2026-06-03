@@ -10,6 +10,7 @@ const baseInputs = {
   wallsDemolition: 0,
   wallConstruction: 0,
   paintingRooms: 0,
+  floorLevel: 0 as const,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
@@ -36,7 +37,7 @@ describe('calculateEstimate', () => {
       },
     };
 
-    const expected =
+    const expectedTotal =
       60 * PRICES.sqm +
       2 * PRICES.bathroom +
       60 * PRICES.falseCeiling +
@@ -46,7 +47,7 @@ describe('calculateEstimate', () => {
       PRICES.heating +
       PRICES.gas;
 
-    expect(calculateEstimate(inputs)).toBe(expected);
+    expect(calculateEstimate(inputs)).toBe(expectedTotal);
   });
 
   it('excludes unselected systems', () => {
@@ -107,7 +108,7 @@ describe('calculateEstimate', () => {
     const sum = breakdown.reduce((acc, item) => acc + item.amount, 0);
 
     expect(sum).toBe(calculateEstimate(inputs));
-    expect(breakdown).toHaveLength(11);
+    expect(breakdown).toHaveLength(12);
     expect(breakdown.find((item) => item.id === 'doorFrames')?.amount).toBe(
       2 * PRICES.doorFrame,
     );
