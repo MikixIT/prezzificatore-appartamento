@@ -12,6 +12,8 @@ type NumberField =
   | 'falseCeiling'
   | 'airConditioners'
   | 'doorFrames'
+  | 'wallsDemolition'
+  | 'paintingRooms'
   | 'waterproofingArea';
 
 const INITIAL_STATE: RenovationCalculatorState = {
@@ -20,6 +22,8 @@ const INITIAL_STATE: RenovationCalculatorState = {
   falseCeiling: 0,
   airConditioners: 0,
   doorFrames: 0,
+  wallsDemolition: 0,
+  paintingRooms: 0,
   waterproofingEnabled: false,
   waterproofingArea: 0,
   systems: {
@@ -181,6 +185,40 @@ export function RenovationCalculator() {
               />
               <span id="door-frames-hint" className={styles.hint}>
                 Montaggio, 500 €/cad.
+              </span>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="wallsDemolition">
+                Abbattimento muro
+              </label>
+              <NumberStepperInput
+                id="wallsDemolition"
+                value={state.wallsDemolition}
+                onChange={handleNumberFieldChange('wallsDemolition')}
+                ariaDescribedBy="walls-hint"
+                decrementLabel="Diminuisci muri da abbattere"
+                incrementLabel="Aumenta muri da abbattere"
+              />
+              <span id="walls-hint" className={styles.hint}>
+                650 €/cad.
+              </span>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="paintingRooms">
+                Tinteggiatura camera
+              </label>
+              <NumberStepperInput
+                id="paintingRooms"
+                value={state.paintingRooms}
+                onChange={handleNumberFieldChange('paintingRooms')}
+                ariaDescribedBy="painting-hint"
+                decrementLabel="Diminuisci camere da tinteggiare"
+                incrementLabel="Aumenta camere da tinteggiare"
+              />
+              <span id="painting-hint" className={styles.hint}>
+                400 €/cad.
               </span>
             </div>
           </div>

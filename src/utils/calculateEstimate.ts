@@ -6,6 +6,8 @@ export const PRICES = {
   falseCeiling: 35,
   airConditioner: 400,
   doorFrame: 500,
+  wallsDemolition: 650,
+  paintingRooms: 400,
   waterproofing: 50,
   electrical: 2000,
   plumbing: 1800,
@@ -29,6 +31,8 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
     falseCeiling,
     airConditioners,
     doorFrames,
+    wallsDemolition,
+    paintingRooms,
     waterproofingEnabled,
     waterproofingArea,
     systems,
@@ -78,6 +82,24 @@ export function calculateEstimateBreakdown(inputs: RenovationInputs): EstimateBr
       label: 'Porte telai a scomparsa',
       detail: `${doorFrames} × ${PRICES.doorFrame} €`,
       amount: doorFrames * PRICES.doorFrame,
+    });
+  }
+
+  if (wallsDemolition > 0) {
+    items.push({
+      id: 'wallsDemolition',
+      label: 'Abbattimento muro',
+      detail: `${wallsDemolition} × ${PRICES.wallsDemolition} €`,
+      amount: wallsDemolition * PRICES.wallsDemolition,
+    });
+  }
+
+  if (paintingRooms > 0) {
+    items.push({
+      id: 'paintingRooms',
+      label: 'Tinteggiatura camera',
+      detail: `${paintingRooms} × ${PRICES.paintingRooms} €`,
+      amount: paintingRooms * PRICES.paintingRooms,
     });
   }
 
